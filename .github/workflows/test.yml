@@ -1,0 +1,35 @@
+name: test
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # --ignore-scripts: the package's own postinstall downloads the whole
+      # electerm binary, which CI has no use for.
+      - name: Install dev dependencies
+        run: npm i --ignore-scripts
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      # npm-install2.spec.js exercises the real HTTP download path against
+      # httpbin.org, so it is allowed to fail without failing the build.
+      - name: Installer tests (network dependent)
+        continue-on-error: true
+        run: npm run test-network

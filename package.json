@@ -1,0 +1,54 @@
+{
+  "name": "electerm",
+  "version": "5.5.16",
+  "description": "Terminal/ssh/telnet/serialport/sftp client(linux, mac, win)",
+  "bin": "npm/electerm",
+  "scripts": {
+    "postinstall": "node npm/install.js",
+    "test": "node --test test/npm-install-target.spec.js",
+    "test-network": "node test/npm-install2.spec.js",
+    "lint": "./node_modules/.bin/standard --verbose",
+    "fix": "./node_modules/.bin/standard --fix",
+    "pack-check": "npm pack --dry-run"
+  },
+  "license": "MIT",
+  "homepage": "https://electerm.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electerm/electerm-npm.git"
+  },
+  "author": {
+    "name": "ZHAO Xudong",
+    "email": "zxdong@gmail.com",
+    "url": "https://github.com/zxdong262"
+  },
+  "bugs": {
+    "url": "https://github.com/electerm/electerm-npm/issues"
+  },
+  "releases": "https://github.com/electerm/electerm/releases",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "preferGlobal": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "npm",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "shelljs": "^0.8.5",
+    "tar": "^7.5.21"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  },
+  "standard": {
+    "ignore": [
+      "/electerm",
+      "/node_modules"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# Output of 'npm pack'
+*.tgz
+
+# Where npm/install.js extracts the electerm binary (and its temp dir)
+electerm/
+.electerm-tmp/
+
+# Optional npm cache directory
+.npm
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/

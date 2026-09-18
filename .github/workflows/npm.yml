@@ -1,0 +1,92 @@
+name: publish-to-npm
+
+# The version is never committed back to this repo: electerm/electerm passes the
+# release tag in the dispatch payload and CI stamps it onto package.json right
+# before publishing. That way the published version can never drift from the
+# release it was built for, and there is no bot commit to babysit.
+on:
+  # Fired by electerm/electerm when a release is published
+  # (.github/workflows/trigger-npm-publish.yml there).
+  repository_dispatch:
+    types: [electerm-release]
+  # Manual re-publish / backfill.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish, x.y.z (e.g. 5.5.16)'
+        required: true
+        type: string
+  # Tagging this repo directly is also supported.
+  push:
+    tags:
+      - 'v*'
+
+# id-token: write is REQUIRED for npm trusted publishing (OIDC) to work
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node and npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Resolve version
+        id: ver
+        env:
+          DISPATCH_VERSION: ${{ github.event.client_payload.version }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -eu
+          raw="${DISPATCH_VERSION:-${INPUT_VERSION:-$REF_NAME}}"
+          ver="${raw#v}"
+          if ! printf '%s' "$ver" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Not an x.y.z version: '$raw'"
+            exit 1
+          fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $ver"
+
+      - name: Skip if already published
+        id: check
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -eu
+          existing="$(npm view "electerm@${VERSION}" version 2>/dev/null || true)"
+          if [ "$existing" = "$VERSION" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::electerm@${VERSION} is already on npm, nothing to do"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set package version
+        if: steps.check.outputs.skip != 'true'
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: npm version "$VERSION" --no-git-tag-version --allow-same-version
+
+      # Guards against a regression in the `files` field silently shipping an
+      # empty or bloated tarball.
+      - name: Verify tarball contents
+        if: steps.check.outputs.skip != 'true'
+        run: npm pack --dry-run
+
+      # Trusted publishing: do NOT pass a token. npm authenticates via the
+      # GitHub OIDC token. Clear NODE_AUTH_TOKEN so no legacy token is used.
+      - name: Publish to npm
+        if: steps.check.outputs.skip != 'true'
+        run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ""
