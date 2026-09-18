@@ -18,8 +18,10 @@ it. The application source lives in
 `packageRoot` is one level above `npm/`, both here and in the published tarball,
 so the installer behaves identically in a checkout and after `npm i -g`.
 
-`README.md` is a copy of the main repo's README — it is what the npm package page
-renders. Keep the "This npm package" section at the bottom when re-syncing it.
+`README.md` / `README_cn.md` describe this npm installer (what it does,
+supported platforms, proxy, upgrade) plus a short "About electerm" section
+linking to the main repo. They are not copies of the app README. Keep EN and
+CN in sync when editing.
 
 ## Development
 

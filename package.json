@@ -36,6 +36,7 @@
   "files": [
     "npm",
     "README.md",
+    "README_cn.md",
     "LICENSE"
   ],
   "dependencies": {
