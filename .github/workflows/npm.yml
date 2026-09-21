@@ -83,6 +83,30 @@ jobs:
         if: steps.check.outputs.skip != 'true'
         run: npm pack --dry-run
 
+      # TEMPORARY DIAGNOSTIC (branch-only, never merge).
+      # The registry answers the token exchange with a bare 404 "package not
+      # found", which does not distinguish "no trusted publisher configured"
+      # from "a trusted publisher is configured but the OIDC claims don't
+      # match". Exchanging for a package we KNOW has a record (electerm-react,
+      # owned by electerm/electerm) makes the two cases tell themselves apart.
+      - name: Probe npm OIDC token exchange
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          set -eu
+          id_token="$(curl -sS \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=npm:registry.npmjs.org" \
+            | jq -r .value)"
+          for pkg in electerm '@electerm%2Felecterm-react'; do
+            code="$(curl -sS -o /tmp/body -w '%{http_code}' -X POST \
+              -H "Authorization: Bearer ${id_token}" \
+              "https://registry.npmjs.org/-/npm/v1/oidc/token/exchange/package/${pkg}")"
+            echo "::group::exchange ${pkg} -> HTTP ${code}"
+            cat /tmp/body
+            echo
+            echo "::endgroup::"
+          done
+
       # Trusted publishing: do NOT pass a token. npm authenticates via the
       # GitHub OIDC token. Clear NODE_AUTH_TOKEN so no legacy token is used.
       #
