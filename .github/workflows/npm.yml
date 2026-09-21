@@ -85,8 +85,14 @@ jobs:
 
       # Trusted publishing: do NOT pass a token. npm authenticates via the
       # GitHub OIDC token. Clear NODE_AUTH_TOKEN so no legacy token is used.
+      #
+      # --loglevel verbose is deliberate: npm's OIDC token exchange never throws,
+      # it returns undefined after a `verbose`-level log, so a rejected trusted
+      # publisher (wrong repo / workflow filename / environment) surfaces only as
+      # a bare `ENEEDAUTH` at default log level. Verbose prints
+      # `npm verbose oidc Failed token exchange request with body message: ...`.
       - name: Publish to npm
         if: steps.check.outputs.skip != 'true'
-        run: npm publish --provenance
+        run: npm publish --provenance --loglevel verbose
         env:
           NODE_AUTH_TOKEN: ""
