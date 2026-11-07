@@ -130,7 +130,7 @@ Related links / projects:
 - [Theme](https://theme.electerm.org) · [Docker](https://github.com/electerm/electerm-web-docker) · [Online demo](https://demo.electerm.org)
 - [Android](https://github.com/electerm/electerm-android) · [HarmonyOS](https://github.com/electerm/electerm-harmony) · [Web version](https://github.com/electerm/electerm-web)
 - [electerm online](https://cloud.electerm.org) · [electerm AI](https://ai.electerm.org)
-- [Apple App Store](https://apps.apple.com/cn/app/electerm/id6792971552) · [Huawei AppGallery](https://appgallery.huawei.com/app/detail?id=org.electerm.electerm) · [Microsoft Store](https://www.microsoft.com/store/apps/9NCN7272GTFF) · [Snap Store](https://snapcraft.io/electerm)
+- [Apple App Store](https://apps.apple.com/us/app/electerm/id6792971552) · [Huawei AppGallery](https://appgallery.huawei.com/app/detail?id=org.electerm.electerm) · [Microsoft Store](https://www.microsoft.com/store/apps/9NCN7272GTFF) · [Snap Store](https://snapcraft.io/electerm)
 - [deb repo](https://repos.electerm.org/deb) · [rpm repo](https://repos.electerm.org/rpm)
 
 ## Issues / support

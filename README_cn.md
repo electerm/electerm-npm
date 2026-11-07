@@ -130,7 +130,7 @@ Electerm 是开源的 terminal / ssh / sftp / telnet / serialport / RDP / VNC / 
 - [主题](https://theme.electerm.org) · [Docker](https://github.com/electerm/electerm-web-docker) · [在线演示](https://demo.electerm.org)
 - [Android](https://github.com/electerm/electerm-android) · [HarmonyOS](https://github.com/electerm/electerm-harmony) · [网页版](https://github.com/electerm/electerm-web)
 - [electerm online](https://cloud.electerm.org) · [electerm AI](https://ai.electerm.org)
-- [Apple App Store](https://apps.apple.com/cn/app/electerm/id6792971552) · [华为应用市场](https://appgallery.huawei.com/app/detail?id=org.electerm.electerm) · [Microsoft Store](https://www.microsoft.com/store/apps/9NCN7272GTFF) · [Snap Store](https://snapcraft.io/electerm)
+- [Apple App Store](https://apps.apple.com/us/app/electerm/id6792971552) · [华为应用市场](https://appgallery.huawei.com/app/detail?id=org.electerm.electerm) · [Microsoft Store](https://www.microsoft.com/store/apps/9NCN7272GTFF) · [Snap Store](https://snapcraft.io/electerm)
 - [deb 源](https://repos.electerm.org/deb) · [rpm 源](https://repos.electerm.org/rpm)
 
 ## 问题反馈 / 支持
